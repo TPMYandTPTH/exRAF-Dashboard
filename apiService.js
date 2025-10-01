@@ -1,6 +1,6 @@
 // apiService.js — Power Automate Integration + Demo Dataset
 // Ensures a global `ApiService` for script.js to call
-
+const isWFHxRAF = sourceStr.toLowerCase().trim() === 'wfhxraf';
 const ApiService = (function () {
   const POWER_AUTOMATE_URL =
     'https://prod-64.southeastasia.logic.azure.com:443/workflows/e1583b4aa1f140df8402c75d18538409/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B88bcWT3wuQyxyEyMr8uYhIqTzJmq6t3rHsvsSJ32YY';

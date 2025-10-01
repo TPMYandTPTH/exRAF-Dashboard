@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TP External RAF Dashboard</title>
+  <link rel="icon" href="TPLogo11.png" type="image/png"/>
+
+  <!-- Bootstrap & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <!-- Main CSS -->
+  <link href="styles.css" rel="stylesheet"/>
+
+  <!-- Small inline overrides to guarantee fixes even before styles.css is updated -->
+  <style>
+    /* ensure “In Progress” card doesn’t clash with .progress */
+    .stats-card.in-progress { border-left: 4px solid var(--warning-color); }
+    /* boxed social media area with heavier shadow */
+    .social-card { box-shadow: 0 12px 40px rgba(0,0,0,0.18); border: 1px solid var(--line); border-radius: .5rem; }
+    /* center the logo in Status Distribution chart */
+    .chart-logo { position: absolute; inset: 0; margin: auto; width: 60px; height: 60px; opacity: .1; pointer-events: none; transform: none; left: auto; top: auto; }
+  </style>
+</head>
+<body>
+  <div id="alert-container"></div>
+
+  <div class="container py-4">
+    <div class="text-center mb-4">
+      <img src="TPLogo11.png" alt="TP Logo" class="logo mx-auto d-block">
+    </div>
+
+    <!-- Language Selection -->
+    <div class="row justify-content-end mb-3">
+      <div class="col-md-3">
+        <div class="mb-3">
+          <label for="lang-select" class="form-label" data-translate="pageLangLabel">Choose Your Language:</label>
+          <select class="form-select" id="lang-select">
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="zh-CN">中文 (简体)</option>
+            <option value="zh-HK">中文 (繁體)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Authentication Step -->
+    <div id="auth-step">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h2 class="card-title text-center" data-translate="dashboardTitle">TP External RAF Dashboard</h2>
+          <p class="card-text text-center mb-4" data-translate="dashboardSubtitle">Enter your details to view your referral status</p>
+
+          <form id="dashboard-form">
+            <div class="mb-3">
+              <label for="dashboard-phone" class="form-label" data-translate="phoneLabel">Phone Number:</label>
+              <input type="tel" class="form-control" id="dashboard-phone" placeholder="Enter your phone number (01XXXXXXXX)" data-translate-placeholder="phonePlaceholder" required>
+              <div class="invalid-feedback" data-translate="phoneError">Please provide a valid phone number (01XXXXXXXX).</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="dashboard-email" class="form-label" data-translate="emailLabel">Email Address:</label>
+              <input type="email" class="form-control" id="dashboard-email" placeholder="Enter your email address" data-translate-placeholder="emailPlaceholder" required>
+              <div class="invalid-feedback" data-translate="emailError">Please provide a valid email address.</div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button type="button" id="dashboard-submit" class="btn btn-primary" data-translate="viewStatusBtn">View Referral Status</button>
+              <a href="https://tpmyandtpth.github.io/xRAF/" class="btn btn-outline-secondary" data-translate="backToRAF">Back to Referral Form</a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Email Contact Section -->
+      <div class="card mb-4">
+        <div class="card-body text-center">
+          <p class="mb-0">
+            <span data-translate="contactUsText">Email us at:</span>
+            <a href="mailto:tpmycareers@teleperformance.com">tpmycareers@teleperformance.com</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Step (initially hidden) -->
+    <div id="results-step" style="display:none;"></div>
+
+    <!-- Social Media (boxed + heavier shadow) -->
+    <div class="card social-card mt-4">
+      <div class="card-body">
+        <div class="row text-center">
+          <div class="col-md-4 mb-3">
+            <h5 data-translate="tpGlobal">TP Global</h5>
+            <div class="d-flex justify-content-center gap-3">
+              <a href="https://www.linkedin.com/company/teleperformance" class="social-icon" target="_blank"><i class="fab fa-linkedin"></i></a>
+              <a href="https://www.youtube.com/@TeleperformanceGroup" class="social-icon" target="_blank"><i class="fab fa-youtube"></i></a>
+              <a href="https://www.tiktok.com/@teleperformance_group" class="social-icon" target="_blank"><i class="fab fa-tiktok"></i></a>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h5 data-translate="followMalaysia">TP Malaysia</h5>
+            <div class="d-flex justify-content-center gap-3">
+              <a href="https://www.facebook.com/TPinMalaysia/" class="social-icon" target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="http://www.instagram.com/tp_malaysia/" class="social-icon" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h5 data-translate="followThailand">TP Thailand</h5>
+            <div class="d-flex justify-content-center gap-3">
+              <a href="http://www.facebook.com/TPinThailand/" class="social-icon" target="_blank"><i class="fab fa-facebook-f"></i></a>
+              <a href="http://www.instagram.com/tpinthailand/" class="social-icon" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="footer mt-auto py-3 bg-dark text-white">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="mb-1">© <span id="current-year"></span> TP. All rights reserved.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <p class="mb-1 small">External Referral Program</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TnG Terms Modal -->
+  <div class="modal fade" id="tngModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" data-translate="paymentTermsTitle">Payment Terms & Conditions</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Payment Structure</h6>
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded mb-2">
+                  <div>
+                    <strong>Assessment Passed</strong><br>
+                    <small>RM50 payment is eligible if the candidate passes the AI assessment</small>
+
+                  </div>
+                  <span class="badge bg-success fs-6">RM50</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
+                  <div>
+                    <strong>90-Day Probation</strong><br>
+                    <small>Completed successfully</small>
+                  </div>
+                  <span class="badge bg-success fs-6">RM750</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h6>Important Notes</h6>
+              <ul class="small">
+                <li>Payments via TnG eWallet only</li>
+                <li>No payment for previously applied candidates</li>
+                <li>Must not be an active TP employee</li>
+                <li>Processing within 30 days after verification</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="closeBtn">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- App scripts (order matters) -->
+  <script src="translations.js"></script>
+  <script src="statusMapping.js"></script>
+  <script src="apiService.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

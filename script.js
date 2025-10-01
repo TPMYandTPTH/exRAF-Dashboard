@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Check if xRAF referral (only xRAF is accepted for payment)
             const sourceL = source.toLowerCase().trim();
             const isXRAF = sourceL === 'xraf';
-            
+            const isWFHxRAF = sourceL === 'wfhxraf';  
             // Get assessment result if available
             const assessment = item.assessment || null;
             

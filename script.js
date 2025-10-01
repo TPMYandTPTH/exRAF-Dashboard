@@ -74,8 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         try {
               const apiData = await ApiService.fetchReferrals(phone, email);
-            }
-            
+                        
             // Process and store referrals with deduplication
             AppState.currentReferralsData = processReferrals(apiData);
             

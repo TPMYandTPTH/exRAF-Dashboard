@@ -135,15 +135,19 @@
     </div>
   </footer>
 
-  <!-- TnG Terms Modal -->
-  <div class="modal fade" id="tngModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" data-translate="paymentTermsTitle">Payment Terms & Conditions</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
+<!-- TnG Terms Modal - REPLACE THE ENTIRE MODAL -->
+<div class="modal fade" id="tngModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" data-translate="paymentTermsTitle">Payment Terms & Conditions</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Regular xRAF Section -->
+        <div class="mb-4">
+          <h6 class="text-primary mb-3">Regular xRAF Referrals</h6>
           <div class="row">
             <div class="col-md-6">
               <h6>Payment Structure</h6>
@@ -152,7 +156,6 @@
                   <div>
                     <strong>Assessment Passed</strong><br>
                     <small>RM50 payment is eligible if the candidate passes the AI assessment</small>
-
                   </div>
                   <span class="badge bg-success fs-6">RM50</span>
                 </div>
@@ -176,13 +179,45 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="closeBtn">Close</button>
+        
+        <hr>
+        
+        <!-- WFH Interpreter Section -->
+        <div class="mb-3">
+          <h6 class="text-success mb-3">Work From Home Interpreter (WFHxRAF)</h6>
+          <div class="row">
+            <div class="col-md-6">
+              <h6>Payment Structure</h6>
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
+                  <div>
+                    <strong>90-Day Probation Completed</strong><br>
+                    <small>Single payment after successful completion</small>
+                  </div>
+                  <span class="badge bg-success fs-6">RM3,000</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h6>Important Notes</h6>
+              <ul class="small">
+                <li><strong>No assessment payment</strong> for WFH role</li>
+                <li>Single RM3,000 payment after 90 days</li>
+                <li>Payments via TnG eWallet only</li>
+                <li>Must not be an active TP employee</li>
+                <li>Processing within 30 days after verification</li>
+              </ul>
+            </div>
+          </div>
         </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="closeBtn">Close</button>
       </div>
     </div>
   </div>
-
+</div>
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

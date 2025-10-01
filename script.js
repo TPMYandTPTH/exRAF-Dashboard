@@ -501,14 +501,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Chart colors - updated to match status types
-        const colors = [
-            '#0087FF',  // Application Received - blue
-            '#00d769',  // Assessment Stage - green flash
-            '#f5d200',  // Hired (Probation) - yellow
-            '#84c98b',  // Hired (Confirmed) - green
-            '#676767',  // Previously Applied (No Payment) - gray
-            '#dc3545'   // Not Selected - red
-        ];
+const colors = [
+    '#0087FF',  // Application Received - blue
+    '#00d769',  // Assessment Stage - green flash
+    '#f5d200',  // Hired (Probation) - yellow
+    '#84c98b',  // Hired (Confirmed) - green
+    '#FF9800',  // Hired (WFH Probation) - orange
+    '#4CAF50',  // Hired (WFH Confirmed) - bright green
+    '#676767',  // Previously Applied (No Payment) - gray
+    '#dc3545'   // Not Selected - red
+];
         
         // Create new chart
         AppState.statusChart = new Chart(ctx, {

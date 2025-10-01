@@ -104,231 +104,214 @@ document.addEventListener('DOMContentLoaded', function() {
     function generateMockData() {
         const today = new Date();
         const mockData = [
-            {
-                Person_system_id: 'TP020',
-                First_Name: 'Tarek Ezz',
-                Email: 'tarekezz@yahoo.com',
-                Employee: '0123456789',
-                Status: 'New Starter (Hired)',
-                Source: 'xRAF',
-                Location: 'Kuala Lumpur',
-                F_Nationality: 'Egypt',
-                CreatedDate: new Date(today - 150 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 100 * 86400000).toISOString()
-            },
-           {
-                Person_system_id: 'TP021',
-                First_Name: 'Loai',
-                Email: 'loai@tp.com',
-                Employee: '0123456789',
-                Status: 'New Starter (Hired)',
-                Source: 'xRAF',
-                Location: 'Penang',
-                F_Nationality: 'Yamen',
-                CreatedDate: new Date(today - 150 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 100 * 86400000).toISOString()
-            },
+      // 1) Application Received (x2)
       {
-                Person_system_id: 'TP022',
-                First_Name: 'Micole Barrientos',
-                Email: 'miki@tp.com',
-                Employee: '0123456789',
-                Status: 'New Starter (Hired)',
-                Source: 'xRAF',
-                Location: 'Penang',
-                F_Nationality: 'Philipinese',
-                CreatedDate: new Date(today - 150 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 100 * 86400000).toISOString()
-            },
-     {
-                Person_system_id: 'TP023',
-                First_Name: 'Anna Saw Yee Lin',
-                Email: 'anna@tp.com',
-                Employee: '0123456789',
-                Status: 'New Starter (Hired)',
-                Source: 'xRAF',
-                Location: 'Penang',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 150 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 100 * 86400000).toISOString()
-            },
-         {
-                Person_system_id: 'TP024',
-                First_Name: 'Pourya Tohidi',
-                Email: 'pourya@tp.com',
-                Employee: '0123456789',
-                Status: 'New Starter (Hired)',
-                Source: 'xRAF',
-                Location: 'Penang',
-                F_Nationality: 'Iran',
-                CreatedDate: new Date(today - 150 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 100 * 86400000).toISOString()
-            },
-                 {
-                Person_system_id: 'TP025',
-                First_Name: 'Melaine Sua',
-                Email: 'melaine@tp.com',
-                Employee: '0123456789',
-                Status: 'New Starter (Hired)',
-                Source: 'xRAF',
-                Location: 'Penang',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 150 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 100 * 86400000).toISOString()
-            },
-    
-            // Application Received (2 examples)
-            {
-                Person_system_id: 'TP001',
-                First_Name: 'Amr Ezz',
-                Email: 'amr@gmail.com',
-                Employee: '0183931348',
-                Status: 'Application Received',
-                Source: 'xRAF',
-                Location: 'Kuala Lumpur',
-                F_Nationality: 'Egypt',
-                CreatedDate: new Date(today - 2 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 2 * 86400000).toISOString()
-            },
-            {
-                Person_system_id: 'TP002', 
-                First_Name: 'Micole Barrientos',
-                Email: 'Miki@hotmail.com',
-                Employee: '0126240297',
-                Status: 'Contact Attempt 1',
-                Source: 'xRAF',  // Changed to xRAF
-                Location: 'Penang',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 5 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 4 * 86400000).toISOString()
-            },
-            // Assessment Stage (2 examples)
-            {
-                Person_system_id: 'TP003',
-                First_Name: 'Kumar Raj',
-                Email: 'kumar.raj@yahoo.com',
-                Employee: '0176543210',
-                Status: 'SHL Assessment: Conversational Multichat ENG',
-                Source: 'xRAF',
-                Location: 'Johor Bahru',
-                F_Nationality: 'Indian',
-                CreatedDate: new Date(today - 10 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 3 * 86400000).toISOString()
-            },
-            {
-                Person_system_id: 'TP004',
-                First_Name: 'Jennifer Tan',
-                Email: 'jennifer.tan@gmail.com',
-                Employee: '0165432109',
-                Status: 'Interview Scheduled',
-                Source: 'xRAF',
-                Location: 'Cyberjaya',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 15 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 1 * 86400000).toISOString()
-            },
-            // Hired (Probation) (2 examples)
-            {
-                Person_system_id: 'TP005',
-                First_Name: 'Michael Wong',
-                Email: 'michael.wong@outlook.com',
-                Employee: '0154321098',
-                Status: 'New Starter (Hired)',
-                Source: 'xRAF',
-                Location: 'Kuala Lumpur',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 45 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 30 * 86400000).toISOString()
-            },
-            // Lisa Chen - Hired Probation (not xRAF, so won't get payment)
-            {
-                Person_system_id: 'TP006',
-                First_Name: 'Lisa Chen',
-                Email: 'lisa.chen@gmail.com',
-                Employee: '0143210987',
-                Status: 'Onboarding Started',
-                Source: 'xRAF',  // Changed to xRAF for payment eligibility
-                Location: 'Petaling Jaya',
-                F_Nationality: 'Chinese',
-                CreatedDate: new Date(today - 60 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 50 * 86400000).toISOString()
-            },
-            // Hired (Confirmed) (2 examples)
-            {
-                Person_system_id: 'TP007',
-                First_Name: 'David Lim',
-                Email: 'david.lim@gmail.com',
-                Employee: '0132109876',
-                Status: 'Graduate',
-                Source: 'xRAF',
-                Location: 'Kuala Lumpur',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 120 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 95 * 86400000).toISOString()
-            },
-            {
-                Person_system_id: 'TP008',
-                First_Name: 'Emily Ooi',
-                Email: 'emily.ooi@yahoo.com',
-                Employee: '0121098765',
-                Status: 'New Starter (Hired)',
-                Source: 'xRAF',
-                Location: 'Penang',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 150 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 100 * 86400000).toISOString()
-            },
-            // Previously Applied (No Payment) (2 examples)
-            {
-                Person_system_id: 'TP009',
-                First_Name: 'Jason Ng',
-                Email: 'jason.ng@gmail.com',
-                Employee: '0110987654',
-                Status: 'Interview Complete / Offer Requested',
-                Source: 'External Portal',  // Not xRAF
-                Location: 'Shah Alam',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 20 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 10 * 86400000).toISOString()
-            },
-            {
-                Person_system_id: 'TP010',
-                First_Name: 'Rachel Yap',
-                Email: 'rachel.yap@hotmail.com',
-                Employee: '0109876543',
-                Status: 'Screened',
-                Source: 'Internal Portal',  // Not xRAF
-                Location: 'Subang Jaya',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 25 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 15 * 86400000).toISOString()
-            },
-            // Not Selected (2 examples)
-            {
-                Person_system_id: 'TP011',
-                First_Name: 'Steven Toh',
-                Email: 'steven.toh@gmail.com',
-                Employee: '0198765432',
-                Status: 'Eliminated - Assessment Results Did Not Meet Criteria',
-                Source: 'xRAF',
-                Location: 'Ipoh',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 30 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 20 * 86400000).toISOString()
-            },
-            {
-                Person_system_id: 'TP012',
-                First_Name: 'Angela Low',
-                Email: 'angela.low@yahoo.com',
-                Employee: '0187654321',
-                Status: 'Withdrew - Other Job Offer',
-                Source: 'xRAF',  // Changed to xRAF
-                Location: 'Melaka',
-                F_Nationality: 'Malaysian',
-                CreatedDate: new Date(today - 35 * 86400000).toISOString(),
-                UpdatedDate: new Date(today - 25 * 86400000).toISOString()
-            }
-        ];
+        ID: 1001,
+        Person_x0020_Full_x0020_Name: 'Tarek Ezz',
+        Person_x0020_Email: 'tarek@tp.com',
+        Default_x0020_Phone: '0182708243',
+        Recent_x0020_Status: 'Application Received',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Kuala Lumpur',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 2 * 86400000).toISOString(),
+        Modified: new Date(today - 2 * 86400000).toISOString()
+      },
+      {
+        ID: 1002,
+        Person_x0020_Full_x0020_Name: 'Loai',
+        Person_x0020_Email: 'loai@tp.com',
+        Default_x0020_Phone: '0174669871',
+        Recent_x0020_Status: 'Application Received',
+        Source_x0020_Name: 'WFHxRAF',
+        Location: 'Penang',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 5 * 86400000).toISOString(),
+        Modified: new Date(today - 5 * 86400000).toISOString()
+      },
+
+      // 2) Assessment Stage (x2) - xRAF ONLY
+      {
+        ID: 1003,
+        Person_x0020_Full_x0020_Name: 'Micole Barrientos',
+        Person_x0020_Email: 'miki@tp.com',
+        Default_x0020_Phone: '0177862292',
+        Recent_x0020_Status: 'Interview Scheduled',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Kuala Lumpur',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 10 * 86400000).toISOString(),
+        Modified: new Date(today - 3 * 86400000).toISOString()
+      },
+      {
+        ID: 1004,
+        Person_x0020_Full_x0020_Name: 'Pourya Tohidi',
+        Person_x0020_Email: 'pourya@tp.com',
+        Default_x0020_Phone: '0198899001',
+        Recent_x0020_Status: 'Screened: Green Candidate',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Johor Bahru',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 15 * 86400000).toISOString(),
+        Modified: new Date(today - 10 * 86400000).toISOString()
+      },
+
+      // 3) Hired (Probation) — < 90 days (x2 xRAF)
+      {
+        ID: 1005,
+        Person_x0020_Full_x0020_Name: 'Melaine Sua',
+        Person_x0020_Email: 'melaine@tp.com',
+        Default_x0020_Phone: '0109988776',
+        Recent_x0020_Status: 'Onboarding Started',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Kuala Lumpur',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 45 * 86400000).toISOString(),
+        Modified: new Date(today - 30 * 86400000).toISOString()
+      },
+      {
+        ID: 1006,
+        Person_x0020_Full_x0020_Name: 'Anna Saw Yee Lin',
+        Person_x0020_Email: 'anna@tp.com',
+        Default_x0020_Phone: '0185566778',
+        Recent_x0020_Status: 'Contract Presented',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Cyberjaya',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 60 * 86400000).toISOString(),
+        Modified: new Date(today - 50 * 86400000).toISOString()
+      },
+
+      // 4) Hired (Confirmed) — ≥ 90 days (x2 xRAF)
+      {
+        ID: 1007,
+        Person_x0020_Full_x0020_Name: 'Maho Yoriguchi',
+        Person_x0020_Email: 'maho@tp.com',
+        Default_x0020_Phone: '0161122334',
+        Recent_x0020_Status: 'New Starter (Hired)',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Kuala Lumpur',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 120 * 86400000).toISOString(),
+        Modified: new Date(today - 95 * 86400000).toISOString()
+      },
+      {
+        ID: 1008,
+        Person_x0020_Full_x0020_Name: 'Sieon Lee',
+        Person_x0020_Email: 'maya@tp.com',
+        Default_x0020_Phone: '0136677889',
+        Recent_x0020_Status: 'Cleared to Start',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Penang',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 150 * 86400000).toISOString(),
+        Modified: new Date(today - 100 * 86400000).toISOString()
+      },
+
+      // 5) WFH Hired (Probation) — < 90 days (x2 WFHxRAF)
+      {
+        ID: 1013,
+        Person_x0020_Full_x0020_Name: 'Sarah Johnson',
+        Person_x0020_Email: 'sarah@tp.com',
+        Default_x0020_Phone: '0123334455',
+        Recent_x0020_Status: 'New Starter (Hired)',
+        Source_x0020_Name: 'WFHxRAF',
+        Location: 'Kuala Lumpur',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 60 * 86400000).toISOString(),
+        Modified: new Date(today - 50 * 86400000).toISOString()
+      },
+      {
+        ID: 1014,
+        Person_x0020_Full_x0020_Name: 'Ahmad Ibrahim',
+        Person_x0020_Email: 'ahmad@tp.com',
+        Default_x0020_Phone: '0198887766',
+        Recent_x0020_Status: 'Onboarding Started',
+        Source_x0020_Name: 'WFHxRAF',
+        Location: 'Penang',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 45 * 86400000).toISOString(),
+        Modified: new Date(today - 40 * 86400000).toISOString()
+      },
+
+      // 6) WFH Hired (Confirmed) — ≥ 90 days (x2 WFHxRAF)
+      {
+        ID: 1015,
+        Person_x0020_Full_x0020_Name: 'Maria Santos',
+        Person_x0020_Email: 'maria@tp.com',
+        Default_x0020_Phone: '0177778888',
+        Recent_x0020_Status: 'New Starter (Hired)',
+        Source_x0020_Name: 'WFHxRAF',
+        Location: 'Cyberjaya',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 120 * 86400000).toISOString(),
+        Modified: new Date(today - 100 * 86400000).toISOString()
+      },
+      {
+        ID: 1016,
+        Person_x0020_Full_x0020_Name: 'David Chen',
+        Person_x0020_Email: 'david@tp.com',
+        Default_x0020_Phone: '0166669999',
+        Recent_x0020_Status: 'Graduate',
+        Source_x0020_Name: 'WFHxRAF',
+        Location: 'Johor Bahru',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 150 * 86400000).toISOString(),
+        Modified: new Date(today - 120 * 86400000).toISOString()
+      },
+
+      // 7) Previously Applied (No Payment) — non-xRAF source (x2)
+      {
+        ID: 1009,
+        Person_x0020_Full_x0020_Name: 'David Ong',
+        Person_x0020_Email: 'david.ong@tp.com',
+        Default_x0020_Phone: '0114455667',
+        Recent_x0020_Status: 'Application Received',
+        Source_x0020_Name: 'LinkedIn',
+        Location: 'Kuching',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 20 * 86400000).toISOString(),
+        Modified: new Date(today - 15 * 86400000).toISOString()
+      },
+      {
+        ID: 1010,
+        Person_x0020_Full_x0020_Name: 'Chloe Tan',
+        Person_x0020_Email: 'chloe@tp.com',
+        Default_x0020_Phone: '0173344556',
+        Recent_x0020_Status: 'Screened',
+        Source_x0020_Name: 'JobStreet',
+        Location: 'Kota Kinabalu',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 25 * 86400000).toISOString(),
+        Modified: new Date(today - 20 * 86400000).toISOString()
+      },
+
+      // 8) Not Selected (x2)
+      {
+        ID: 1011,
+        Person_x0020_Full_x0020_Name: 'Nurul Lydia Adini',
+        Person_x0020_Email: 'lydia@tp.com',
+        Default_x0020_Phone: '0125566778',
+        Recent_x0020_Status: 'Eliminated - Incomplete Assessment',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Kuala Lumpur',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 30 * 86400000).toISOString(),
+        Modified: new Date(today - 25 * 86400000).toISOString()
+      },
+      {
+        ID: 1012,
+        Person_x0020_Full_x0020_Name: 'Hanna Wong',
+        Person_x0020_Email: 'hanna@tp.com',
+        Default_x0020_Phone: '0197788990',
+        Recent_x0020_Status: 'Withdrew - Salary (Post Offer)',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Ipoh',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 35 * 86400000).toISOString(),
+        Modified: new Date(today - 30 * 86400000).toISOString()
+      }
+    ];
         return mockData;
     }
     

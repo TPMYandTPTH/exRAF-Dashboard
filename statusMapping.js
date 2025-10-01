@@ -1,4 +1,4 @@
-// Complete Status Mapping with All Statuses
+// Complete Status Mapping with WFH Interpreter Support
 const StatusMapping = {
     // Map status to simplified group based on rules
     mapStatusToGroup: function(status, assessment, source, daysInStage) {
@@ -7,15 +7,16 @@ const StatusMapping = {
         const statusStr = status.toLowerCase().trim();
         const sourceStr = (source || '').toLowerCase().trim();
         
-        // FIRST CHECK: Source must be xRAF for payment eligibility
+        // Check source types
         const isXRAF = sourceStr === 'xraf';
+        const isWFHxRAF = sourceStr === 'wfhxraf';
         
-        // If source is not xRAF AND not empty, it's previously applied (no payment)
-        if (!isXRAF && sourceStr !== '') {
+        // If source is not xRAF/WFHxRAF AND not empty, it's previously applied (no payment)
+        if (!isXRAF && !isWFHxRAF && sourceStr !== '') {
             return 'Previously Applied (No Payment)';
         }
         
-        // APPLICATION RECEIVED statuses
+        // APPLICATION RECEIVED statuses (same for both xRAF and WFHxRAF)
         if (statusStr === 'application received' ||
             statusStr === 'contact attempt 1' ||
             statusStr === 'contact attempt 2' ||
@@ -30,8 +31,9 @@ const StatusMapping = {
             return 'Application Received';
         }
         
-        // ASSESSMENT STAGE statuses
-        if (statusStr.includes('shl assessment') ||
+        // ASSESSMENT STAGE statuses - ONLY for regular xRAF, NOT for WFHxRAF
+        if (!isWFHxRAF && (
+            statusStr.includes('shl assessment') ||
             statusStr.includes('assessment stage') ||
             statusStr === 'evaluated' ||
             statusStr === 'pre-screened' ||
@@ -47,11 +49,11 @@ const StatusMapping = {
             statusStr === 'waha agreement (signature)' ||
             statusStr === 'moved to another requisition or talent pool' ||
             statusStr === 'class start date' ||
-            statusStr === 're-assigned') {
+            statusStr === 're-assigned')) {
             return 'Assessment Stage';
         }
         
-        // HIRED (PROBATION) statuses - check days for confirmation
+        // HIRED statuses - different handling for WFH vs regular
         if (statusStr === 'credit check initiated' ||
             statusStr === 'onboarding started' ||
             statusStr === 'contract presented' ||
@@ -63,7 +65,16 @@ const StatusMapping = {
             statusStr === 'new starter (hired)' ||
             statusStr === 'graduate' ||
             statusStr.includes('hired')) {
-            // If 90+ days since creation, they're confirmed
+            
+            // WFH Interpreter path
+            if (isWFHxRAF) {
+                if (daysInStage !== undefined && daysInStage >= 90) {
+                    return 'Hired (WFH Confirmed)';
+                }
+                return 'Hired (WFH Probation)';
+            }
+            
+            // Regular xRAF path
             if (daysInStage !== undefined && daysInStage >= 90) {
                 return 'Hired (Confirmed)';
             }
@@ -94,8 +105,10 @@ const StatusMapping = {
         const group = this.mapStatusToGroup(status, assessment, source, daysInStage);
         switch (group) {
             case 'Hired (Confirmed)': 
+            case 'Hired (WFH Confirmed)':
                 return 'passed';
-            case 'Hired (Probation)': 
+            case 'Hired (Probation)':
+            case 'Hired (WFH Probation)':
                 return 'probation';
             case 'Previously Applied (No Payment)': 
                 return 'previously-applied';
@@ -120,6 +133,8 @@ const StatusMapping = {
         'Assessment Stage', 
         'Hired (Probation)',
         'Hired (Confirmed)',
+        'Hired (WFH Probation)',
+        'Hired (WFH Confirmed)',
         'Previously Applied (No Payment)',
         'Not Selected'
     ]
@@ -130,18 +145,24 @@ const earningsStructure = {
     assessment: {
         amount: 50,
         label: "Assessment Passed",
-        condition: "Candidate passes the AI assessment",
+        condition: "Candidate passes the AI assessment (xRAF only)",
         payment: "RM50"
     },
     probation: { 
         amount: 750, 
         label: "Probation Completed",
-        condition: "Candidate completes 90-day probation period",
+        condition: "Candidate completes 90-day probation period (xRAF only)",
         payment: "RM750"
+    },
+    wfhProbation: {
+        amount: 3000,
+        label: "WFH Interpreter - 90 Days",
+        condition: "WFH Interpreter completes 90-day probation period",
+        payment: "RM3,000"
     }
 };
 
-// Status examples for guide - UPDATED TEXT
+// Status examples for guide
 const statusExamples = [
     {
         status: "Application Received",
@@ -150,22 +171,32 @@ const statusExamples = [
     },
     {
         status: "Assessment Stage",
-        description: "Candidate in assessment/interview process",
-        action: "RM50 payment eligible if the candidate pass the AI assessment"
+        description: "Candidate in assessment/interview process (xRAF only)",
+        action: "RM50 payment is eligible if the candidate passes the AI assessment"
     },
     {
         status: "Hired (Probation)",
-        description: "Candidate hired but in probation period (<90 days)",
+        description: "Candidate hired but in probation period (<90 days, xRAF)",
         action: "Monitor progress"
     },
     {
         status: "Hired (Confirmed)",
-        description: "Candidate completed 90-day probation",
+        description: "Candidate completed 90-day probation (xRAF)",
         action: "RM750 payment eligible"
     },
     {
+        status: "Hired (WFH Probation)",
+        description: "WFH Interpreter hired but in probation period (<90 days)",
+        action: "Monitor progress"
+    },
+    {
+        status: "Hired (WFH Confirmed)",
+        description: "WFH Interpreter completed 90-day probation",
+        action: "RM3,000 payment eligible"
+    },
+    {
         status: "Previously Applied (No Payment)",
-        description: "Candidate applied through other sources (not xRAF)",
+        description: "Candidate applied through other sources (not xRAF/WFHxRAF)",
         action: "No payment eligible"
     },
     {

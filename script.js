@@ -420,7 +420,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Source and eligibility
                 source: source,
                 isXRAF: isXRAF,
-                isPreviousCandidate: !isXRAF && source !== '',
+                isWFHxRAF: isWFHxRAF,  // NEW: Add WFH flag
+                isPreviousCandidate: !isXRAF && !isWFHxRAF && source !== '',  // UPDATED
                 
                 // Assessment info
                 assessment: assessment,
@@ -441,13 +442,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Action flags
                 needsAction: needsAction,
                 
-                // Payment eligibility (with proper checks)
-                isEligibleForAssessmentPayment: isXRAF && (
-                    mappedStatus === 'Assessment Stage' || 
-                    mappedStatus === 'Hired (Probation)' || 
-                    mappedStatus === 'Hired (Confirmed)'
+                // Payment eligibility (UPDATED with WFH logic)
+                isEligibleForAssessmentPayment: isXRAF && !isWFHxRAF && (  // NOT for WFH
+                   mappedStatus === 'Assessment Stage' || 
+                   mappedStatus === 'Hired (Probation)' || 
+                   mappedStatus === 'Hired (Confirmed)'
                 ) && (!assessment || assessment.score >= 70),
-                isEligibleForProbationPayment: isXRAF && mappedStatus === 'Hired (Confirmed)',
+    
+                isEligibleForProbationPayment: isXRAF && !isWFHxRAF && 
+                   mappedStatus === 'Hired (Confirmed)',  // Regular xRAF only
+    
+                isEligibleForWFHPayment: isWFHxRAF && 
+                   mappedStatus === 'Hired (WFH Confirmed)',  // NEW: WFH payment
+
                 
                 // Original data for debugging
                 _original: item
@@ -804,36 +811,46 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Update earnings table with new logic
-    function updateEarningsTable(referrals) {
-        const earningsBody = document.getElementById('earnings-body');
-        if (!earningsBody) return;
-        
-        // Calculate eligible candidates
-        const assessmentPassed = referrals.filter(r => r.isEligibleForAssessmentPayment).length;
-        const probationCompleted = referrals.filter(r => r.isEligibleForProbationPayment).length;
-        
-        // Calculate earnings
-        const assessmentEarnings = assessmentPassed * 50;
-        const probationEarnings = probationCompleted * 750;
-        const totalEarnings = assessmentEarnings + probationEarnings;
-        
-        earningsBody.innerHTML = `
-            <tr>
-                <td data-translate="statusAssessmentPassed">Assessment Passed (Score ≥ 70%)</td>
-                <td>RM 50</td>
-                <td>${assessmentPassed}</td>
-                <td>RM ${assessmentEarnings}</td>
-            </tr>
-            <tr>
-                <td data-translate="statusProbationPassed">Probation Completed (90 days)</td>
-                <td>RM 750</td>
-                <td>${probationCompleted}</td>
-                <td>RM ${probationEarnings}</td>
-            </tr>
-        `;
-        
-        document.getElementById('total-earnings').textContent = `RM ${totalEarnings}`;
-    }
+function updateEarningsTable(referrals) {
+    const earningsBody = document.getElementById('earnings-body');
+    if (!earningsBody) return;
+    
+    // Calculate eligible candidates for regular xRAF
+    const assessmentPassed = referrals.filter(r => r.isEligibleForAssessmentPayment).length;
+    const probationCompleted = referrals.filter(r => r.isEligibleForProbationPayment).length;
+    
+    // Calculate eligible candidates for WFH
+    const wfhCompleted = referrals.filter(r => r.isEligibleForWFHPayment).length;
+    
+    // Calculate earnings
+    const assessmentEarnings = assessmentPassed * 50;
+    const probationEarnings = probationCompleted * 750;
+    const wfhEarnings = wfhCompleted * 3000;
+    const totalEarnings = assessmentEarnings + probationEarnings + wfhEarnings;
+    
+    earningsBody.innerHTML = `
+        <tr>
+            <td data-translate="statusAssessmentPassed">Assessment Passed (xRAF - Score ≥ 70%)</td>
+            <td>RM 50</td>
+            <td>${assessmentPassed}</td>
+            <td>RM ${assessmentEarnings}</td>
+        </tr>
+        <tr>
+            <td data-translate="statusProbationPassed">Probation Completed (xRAF - 90 days)</td>
+            <td>RM 750</td>
+            <td>${probationCompleted}</td>
+            <td>RM ${probationEarnings}</td>
+        </tr>
+        <tr class="wfh-row">
+            <td data-translate="statusWFHProbationPassed">WFH Interpreter Completed (90 days)</td>
+            <td>RM 3,000</td>
+            <td>${wfhCompleted}</td>
+            <td>RM ${wfhEarnings}</td>
+        </tr>
+    `;
+    
+    document.getElementById('total-earnings').textContent = `RM ${totalEarnings}`;
+}
     
     // Update reminder section
     function updateReminderSection(referrals) {
@@ -969,45 +986,49 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Update status guide section
-    function updateStatusGuide() {
-        const container = document.getElementById('status-guide-content');
-        if (!container) return;
-        
-        const t = translations[AppState.currentLanguage];
-        
-        container.innerHTML = `
-            <div class="row">
-                <!-- Status Examples -->
-                <div class="col-md-6">
-                    <h6 class="mb-3" data-translate="statusExamples">Status Examples</h6>
-                    <div class="status-examples">
-                        ${statusExamples.map(example => {
-                            // Get the correct status type for coloring
-                            let statusType = StatusMapping.getSimplifiedStatusType(example.status);
-                            if (example.status === "Hired (Confirmed)") statusType = 'passed';
-                            if (example.status === "Previously Applied (No Payment)") statusType = 'previously-applied';
-                            
-                            return `
-                                <div class="status-example">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <strong>${t[`status${example.status.replace(/[\s()]/g, '')}`] || example.status}</strong>
-                                        <span class="badge bg-${statusType}">
-                                            ${example.status}
-                                        </span>
-                                    </div>
-                                    <p class="mb-1 mt-2 small">${example.description}</p>
-                                    <small class="text-muted">${example.action}</small>
+function updateStatusGuide() {
+    const container = document.getElementById('status-guide-content');
+    if (!container) return;
+    
+    const t = translations[AppState.currentLanguage];
+    
+    container.innerHTML = `
+        <div class="row">
+            <!-- Status Examples -->
+            <div class="col-md-6">
+                <h6 class="mb-3" data-translate="statusExamples">Status Examples</h6>
+                <div class="status-examples">
+                    ${statusExamples.map(example => {
+                        // Get the correct status type for coloring
+                        let statusType = StatusMapping.getSimplifiedStatusType(example.status);
+                        if (example.status === "Hired (Confirmed)" || example.status === "Hired (WFH Confirmed)") statusType = 'passed';
+                        if (example.status === "Previously Applied (No Payment)") statusType = 'previously-applied';
+                        
+                        return `
+                            <div class="status-example">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <strong>${t[`status${example.status.replace(/[\s()]/g, '')}`] || example.status}</strong>
+                                    <span class="badge bg-${statusType}">
+                                        ${example.status}
+                                    </span>
                                 </div>
-                            `;
-                        }).join('')}
-                    </div>
+                                <p class="mb-1 mt-2 small">${example.description}</p>
+                                <small class="text-muted">${example.action}</small>
+                            </div>
+                        `;
+                    }).join('')}
                 </div>
+            </div>
+            
+            <!-- Payment Conditions -->
+            <div class="col-md-6">
+                <h6 class="mb-3" data-translate="paymentConditions">Payment Conditions</h6>
                 
-                <!-- Payment Conditions -->
-                <div class="col-md-6">
-                    <h6 class="mb-3" data-translate="paymentConditions">Payment Conditions</h6>
+                <!-- Regular xRAF Section -->
+                <div class="mb-3">
+                    <h6 class="small text-primary mb-2">Regular xRAF Referrals</h6>
                     <div class="table-responsive">
-                        <table class="table status-guide-table">
+                        <table class="table status-guide-table table-sm">
                             <thead>
                                 <tr>
                                     <th data-translate="stage">Stage</th>
@@ -1016,30 +1037,70 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </tr>
                             </thead>
                             <tbody>
-                                ${Object.entries(earningsStructure).map(([key, value]) => `
-                                    <tr>
-                                        <td>${value.label}</td>
-                                        <td>${value.condition}</td>
-                                        <td><strong>${value.payment}</strong></td>
-                                    </tr>
-                                `).join('')}
                                 <tr>
-                                    <td>Previously Applied</td>
-                                    <td data-translate="noPaymentNote">Candidate applied before referral</td>
-                                    <td><strong>No Payment</strong></td>
+                                    <td>Assessment Passed</td>
+                                    <td>Candidate passes the AI assessment</td>
+                                    <td><strong>RM50</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Probation Completed</td>
+                                    <td>Candidate completes 90-day probation period</td>
+                                    <td><strong>RM750</strong></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="payment-notes mt-3">
-                        <p class="small mb-1"><i class="fas fa-info-circle me-2"></i>All payments via Touch 'n Go eWallet</p>
-                        <p class="small mb-1"><i class="fas fa-info-circle me-2"></i>Payments processed within 30 days</p>
-                        <p class="small"><i class="fas fa-info-circle me-2"></i>Must be active TP employee at payment time</p>
+                </div>
+                
+                <!-- WFH Interpreter Section -->
+                <div class="mb-3">
+                    <h6 class="small text-success mb-2">WFH Interpreter (WFHxRAF)</h6>
+                    <div class="table-responsive">
+                        <table class="table status-guide-table table-sm">
+                            <thead>
+                                <tr>
+                                    <th data-translate="stage">Stage</th>
+                                    <th data-translate="condition">Condition</th>
+                                    <th data-translate="payment">Payment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>90-Day Completion</td>
+                                    <td>WFH Interpreter completes 90-day probation</td>
+                                    <td><strong>RM3,000</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+                    <p class="small text-muted mb-0">
+                        <i class="fas fa-info-circle me-1"></i>
+                        No assessment payment for WFH Interpreter role
+                    </p>
+                </div>
+                
+                <!-- Other Cases -->
+                <div class="table-responsive">
+                    <table class="table status-guide-table table-sm">
+                        <tbody>
+                            <tr>
+                                <td>Previously Applied</td>
+                                <td data-translate="noPaymentNote">Candidate applied before referral</td>
+                                <td><strong>No Payment</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="payment-notes mt-3">
+                    <p class="small mb-1"><i class="fas fa-info-circle me-2"></i>All payments via Touch 'n Go eWallet</p>
+                    <p class="small mb-1"><i class="fas fa-info-circle me-2"></i>Payments processed within 30 days</p>
+                    <p class="small"><i class="fas fa-info-circle me-2"></i>Must be active TP employee at payment time</p>
                 </div>
             </div>
-        `;
-    }
+        </div>
+    `;
+}
     
     // Update translations
     function updateTranslations() {

@@ -1,6 +1,6 @@
 // apiService.js — Power Automate Integration + Demo Dataset
 // Ensures a global `ApiService` for script.js to call
-const isWFHxRAF = sourceStr.toLowerCase().trim() === 'wfhxraf';
+
 const ApiService = (function () {
   const POWER_AUTOMATE_URL =
     'https://prod-64.southeastasia.logic.azure.com:443/workflows/e1583b4aa1f140df8402c75d18538409/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B88bcWT3wuQyxyEyMr8uYhIqTzJmq6t3rHsvsSJ32YY';
@@ -65,8 +65,9 @@ const ApiService = (function () {
     }
   }
 
-  // ---------------- Mock dataset (2 examples for each of the 6 groups) ----------------
+  // ---------------- Mock dataset with WFH examples ----------------
   function getMockReferrals() {
+    const today = new Date();
     return [
       // 1) Application Received (x2)
       {
@@ -78,34 +79,34 @@ const ApiService = (function () {
         Source_x0020_Name: 'xRAF',
         Location: 'Kuala Lumpur',
         F_Nationality: 'Malaysia',
-        Created: '2025-08-18T09:00:00Z',
-        Modified: '2025-08-25T09:00:00Z'
+        Created: new Date(today - 2 * 86400000).toISOString(),
+        Modified: new Date(today - 2 * 86400000).toISOString()
       },
       {
         ID: 1002,
         Person_x0020_Full_x0020_Name: 'Loai',
         Person_x0020_Email: 'loai@tp.com',
         Default_x0020_Phone: '0174669871',
-        Recent_x0020_Status: 'SHL Assessment: Typing ENG',
-        Source_x0020_Name: 'xRAF',
+        Recent_x0020_Status: 'Application Received',
+        Source_x0020_Name: 'WFHxRAF',
         Location: 'Penang',
         F_Nationality: 'Malaysia',
-        Created: '2025-08-12T09:00:00Z',
-        Modified: '2025-08-20T09:00:00Z'
+        Created: new Date(today - 5 * 86400000).toISOString(),
+        Modified: new Date(today - 5 * 86400000).toISOString()
       },
 
-      // 2) Assessment Stage (x2)
+      // 2) Assessment Stage (x2) - xRAF ONLY
       {
         ID: 1003,
         Person_x0020_Full_x0020_Name: 'Micole Barrientos',
         Person_x0020_Email: 'miki@tp.com',
         Default_x0020_Phone: '0177862292',
         Recent_x0020_Status: 'Interview Scheduled',
-        Source_x0020_Name: 'WFHxRAF',
+        Source_x0020_Name: 'xRAF',
         Location: 'Kuala Lumpur',
         F_Nationality: 'Malaysia',
-        Created: '2025-08-10T09:00:00Z',
-        Modified: '2025-08-26T09:00:00Z'
+        Created: new Date(today - 10 * 86400000).toISOString(),
+        Modified: new Date(today - 3 * 86400000).toISOString()
       },
       {
         ID: 1004,
@@ -116,11 +117,11 @@ const ApiService = (function () {
         Source_x0020_Name: 'xRAF',
         Location: 'Johor Bahru',
         F_Nationality: 'Malaysia',
-        Created: '2025-08-01T09:00:00Z',
-        Modified: '2025-08-21T09:00:00Z'
+        Created: new Date(today - 15 * 86400000).toISOString(),
+        Modified: new Date(today - 10 * 86400000).toISOString()
       },
 
-      // 3) Hired (Probation) — < 90 days (x2)
+      // 3) Hired (Probation) — < 90 days (x2 xRAF)
       {
         ID: 1005,
         Person_x0020_Full_x0020_Name: 'Melaine Sua',
@@ -130,8 +131,8 @@ const ApiService = (function () {
         Source_x0020_Name: 'xRAF',
         Location: 'Kuala Lumpur',
         F_Nationality: 'Malaysia',
-        Created: '2025-08-05T09:00:00Z',
-        Modified: '2025-08-15T09:00:00Z'
+        Created: new Date(today - 45 * 86400000).toISOString(),
+        Modified: new Date(today - 30 * 86400000).toISOString()
       },
       {
         ID: 1006,
@@ -142,11 +143,11 @@ const ApiService = (function () {
         Source_x0020_Name: 'xRAF',
         Location: 'Cyberjaya',
         F_Nationality: 'Malaysia',
-        Created: '2025-07-20T09:00:00Z',
-        Modified: '2025-08-10T09:00:00Z'
+        Created: new Date(today - 60 * 86400000).toISOString(),
+        Modified: new Date(today - 50 * 86400000).toISOString()
       },
 
-      // 4) Hired (Confirmed) — ≥ 90 days (x2)
+      // 4) Hired (Confirmed) — ≥ 90 days (x2 xRAF)
       {
         ID: 1007,
         Person_x0020_Full_x0020_Name: 'Maho Yoriguchi',
@@ -156,8 +157,8 @@ const ApiService = (function () {
         Source_x0020_Name: 'xRAF',
         Location: 'Kuala Lumpur',
         F_Nationality: 'Malaysia',
-        Created: '2025-04-10T09:00:00Z',
-        Modified: '2025-04-20T09:00:00Z'
+        Created: new Date(today - 120 * 86400000).toISOString(),
+        Modified: new Date(today - 95 * 86400000).toISOString()
       },
       {
         ID: 1008,
@@ -165,40 +166,92 @@ const ApiService = (function () {
         Person_x0020_Email: 'maya@tp.com',
         Default_x0020_Phone: '0136677889',
         Recent_x0020_Status: 'Cleared to Start',
+        Source_x0020_Name: 'xRAF',
+        Location: 'Penang',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 150 * 86400000).toISOString(),
+        Modified: new Date(today - 100 * 86400000).toISOString()
+      },
+
+      // 5) WFH Hired (Probation) — < 90 days (x2 WFHxRAF)
+      {
+        ID: 1013,
+        Person_x0020_Full_x0020_Name: 'Sarah Johnson',
+        Person_x0020_Email: 'sarah@tp.com',
+        Default_x0020_Phone: '0123334455',
+        Recent_x0020_Status: 'New Starter (Hired)',
+        Source_x0020_Name: 'WFHxRAF',
+        Location: 'Kuala Lumpur',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 60 * 86400000).toISOString(),
+        Modified: new Date(today - 50 * 86400000).toISOString()
+      },
+      {
+        ID: 1014,
+        Person_x0020_Full_x0020_Name: 'Ahmad Ibrahim',
+        Person_x0020_Email: 'ahmad@tp.com',
+        Default_x0020_Phone: '0198887766',
+        Recent_x0020_Status: 'Onboarding Started',
         Source_x0020_Name: 'WFHxRAF',
         Location: 'Penang',
         F_Nationality: 'Malaysia',
-        Created: '2025-05-01T09:00:00Z',
-        Modified: '2025-05-15T09:00:00Z'
+        Created: new Date(today - 45 * 86400000).toISOString(),
+        Modified: new Date(today - 40 * 86400000).toISOString()
       },
 
-      // 5) Previously Applied (No Payment) — non-xRAF source (x2)
+      // 6) WFH Hired (Confirmed) — ≥ 90 days (x2 WFHxRAF)
+      {
+        ID: 1015,
+        Person_x0020_Full_x0020_Name: 'Maria Santos',
+        Person_x0020_Email: 'maria@tp.com',
+        Default_x0020_Phone: '0177778888',
+        Recent_x0020_Status: 'New Starter (Hired)',
+        Source_x0020_Name: 'WFHxRAF',
+        Location: 'Cyberjaya',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 120 * 86400000).toISOString(),
+        Modified: new Date(today - 100 * 86400000).toISOString()
+      },
+      {
+        ID: 1016,
+        Person_x0020_Full_x0020_Name: 'David Chen',
+        Person_x0020_Email: 'david@tp.com',
+        Default_x0020_Phone: '0166669999',
+        Recent_x0020_Status: 'Graduate',
+        Source_x0020_Name: 'WFHxRAF',
+        Location: 'Johor Bahru',
+        F_Nationality: 'Malaysia',
+        Created: new Date(today - 150 * 86400000).toISOString(),
+        Modified: new Date(today - 120 * 86400000).toISOString()
+      },
+
+      // 7) Previously Applied (No Payment) — non-xRAF source (x2)
       {
         ID: 1009,
         Person_x0020_Full_x0020_Name: 'David Ong',
-        Person_x0020_Email: 'david@tp.com',
+        Person_x0020_Email: 'david.ong@tp.com',
         Default_x0020_Phone: '0114455667',
         Recent_x0020_Status: 'Application Received',
         Source_x0020_Name: 'LinkedIn',
         Location: 'Kuching',
         F_Nationality: 'Malaysia',
-        Created: '2025-08-17T09:00:00Z',
-        Modified: '2025-08-22T09:00:00Z'
+        Created: new Date(today - 20 * 86400000).toISOString(),
+        Modified: new Date(today - 15 * 86400000).toISOString()
       },
       {
         ID: 1010,
-        Person_x0020_Full_x0020_Name: 'Chloe',
+        Person_x0020_Full_x0020_Name: 'Chloe Tan',
         Person_x0020_Email: 'chloe@tp.com',
         Default_x0020_Phone: '0173344556',
         Recent_x0020_Status: 'Screened',
         Source_x0020_Name: 'JobStreet',
         Location: 'Kota Kinabalu',
         F_Nationality: 'Malaysia',
-        Created: '2025-08-02T09:00:00Z',
-        Modified: '2025-08-19T09:00:00Z'
+        Created: new Date(today - 25 * 86400000).toISOString(),
+        Modified: new Date(today - 20 * 86400000).toISOString()
       },
 
-      // 6) Not Selected (x2)
+      // 8) Not Selected (x2)
       {
         ID: 1011,
         Person_x0020_Full_x0020_Name: 'Nurul Lydia Adini',
@@ -208,8 +261,8 @@ const ApiService = (function () {
         Source_x0020_Name: 'xRAF',
         Location: 'Kuala Lumpur',
         F_Nationality: 'Malaysia',
-        Created: '2025-08-10T09:00:00Z',
-        Modified: '2025-08-16T09:00:00Z'
+        Created: new Date(today - 30 * 86400000).toISOString(),
+        Modified: new Date(today - 25 * 86400000).toISOString()
       },
       {
         ID: 1012,
@@ -220,8 +273,8 @@ const ApiService = (function () {
         Source_x0020_Name: 'xRAF',
         Location: 'Ipoh',
         F_Nationality: 'Malaysia',
-        Created: '2025-06-15T09:00:00Z',
-        Modified: '2025-07-01T09:00:00Z'
+        Created: new Date(today - 35 * 86400000).toISOString(),
+        Modified: new Date(today - 30 * 86400000).toISOString()
       }
     ];
   }
@@ -446,5 +499,3 @@ const ApiService = (function () {
 
 // Ensure the service is globally accessible for script.js
 if (typeof window !== 'undefined') window.ApiService = ApiService;
-// (Optional, if you ever import this in Node tests)
-// if (typeof module !== 'undefined' && module.exports) module.exports = ApiService;
